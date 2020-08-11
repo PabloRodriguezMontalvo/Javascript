@@ -1,7 +1,7 @@
 // var DinoDataJson = fetch("dino.json");
 var mainform=document.querySelector("#dino-compare");
 var gridBody=document.querySelector("#grid");
-let dinos = [];
+var dinos;
 function generateArrayTiles(animals,yo)
 {
     let tiles=[];
