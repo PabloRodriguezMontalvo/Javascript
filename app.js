@@ -199,7 +199,7 @@ async function getMyDinos(){
     const data = await myJson.json();
   
 
-    dinos = data.Dinos.map(dino => (dino.species=="Pigeon")? new Pigeon(dino):  new Dino(dino));
+  return data.Dinos.map(dino => (dino.species=="Pigeon")? new Pigeon(dino):  new Dino(dino));
 }
 
     // Create Human Object
@@ -235,7 +235,7 @@ async function getMyDinos(){
        if(mainform.reportValidity())
        {
 
-        getMyDinos();
+           dinos = await getMyDinos();
 
         dataHuman = (function() {
             return {
