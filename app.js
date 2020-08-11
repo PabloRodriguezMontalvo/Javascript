@@ -1,7 +1,7 @@
 // var DinoDataJson = fetch("dino.json");
 var mainform=document.querySelector("#dino-compare");
 var gridBody=document.querySelector("#grid");
-
+let dinos = [];
 function generateArrayTiles(animals,yo)
 {
     let tiles=[];
@@ -192,9 +192,15 @@ Pigeon.prototype = Object.assign(Object.create(Animal.prototype), {
     }
     
 });
+async function getMyDinos(){
+        // Dinos to the array
 
-const dinos =  DinoDataJson['Dinos'].map(dino => (dino.species=="Pigeon")? new Pigeon(dino):  new Dino(dino));
+    const myJson = await fetch("./dino.json");
+    const data = await myJson.json();
+  
 
+    dinos = data.Dinos.map(dino => (dino.species=="Pigeon")? new Pigeon(dino):  new Dino(dino));
+}
 
     // Create Human Object
     const Human = function(Obj) {
@@ -229,7 +235,7 @@ const dinos =  DinoDataJson['Dinos'].map(dino => (dino.species=="Pigeon")? new P
        if(mainform.reportValidity())
        {
 
-     
+        getMyDinos();
 
         dataHuman = (function() {
             return {
