@@ -20,11 +20,17 @@ function generateArrayTiles(animals,yo)
 function generateHTMLTile(animal,yo)
 {
     const gridItem = document.createElement("div");
-    gridItem.classList.add("grid-item");
-    const head = document.createElement("h4");
+    const head = document.createElement("h2");
+    const upperdiv=document.createElement("div");
+
     const image = document.createElement("img");
     const fact = document.createElement("b");
-  
+    const tooltip=document.createElement("span");
+    gridItem.classList.add("grid-item");
+    upperdiv.classList.add("upperdiv");
+    tooltip.classList.add("tooltip");
+
+
     //Human Tile
     if(animal.species=='human')
     {
@@ -32,26 +38,32 @@ function generateHTMLTile(animal,yo)
    
       head.innerText = animal.name;
   
-      image.src = animal.image;
       image.alt = "human";
+      tooltip.innerHTML="<p><strong>Weight:"+animal.weight+"lbs</strong></p><p><strong>Height:"+animal.getHeight()+"</strong></p>";
+      fact.innerText = animal.getFact();
+
 
     }
       else{
         head.innerText = animal.species;
         image.alt = animal.species;
-        
+        tooltip.innerHTML="<p><strong>Where:"+animal.where+"</strong></p><p><strong>When:"+animal.when+"</strong></p>";
         fact.innerText = animal.getFact(yo);
 
        
       }
-
+    
       image.src = animal.getImg();
       
   //Dino Tile
      
   
     gridItem.appendChild(head);
-    gridItem.appendChild(image);
+    gridItem.appendChild(upperdiv);
+
+    upperdiv.appendChild(image);
+    upperdiv.appendChild(tooltip);
+
     fact.innerText && gridItem.appendChild(fact);
   
     return gridItem;
@@ -179,10 +191,10 @@ Dino.prototype = Object.assign(Object.create(Animal.prototype), {
     },
     getFact: function(animal) {
         var ResultFact = "Interesting...";
-        var randomNumber= Math.floor((Math.random() * 4) + 1);
+        var randomNumber= Math.floor((Math.random() * 5) + 1);
         switch(randomNumber) {
                 case 1:
-               this.compareDiet(animal)
+                this.compareDiet(animal)
                 break;
                 case 2:
                     this.compareWeight(animal);
@@ -196,6 +208,10 @@ Dino.prototype = Object.assign(Object.create(Animal.prototype), {
                     if (this.when== animal.when) {
                         this.fact=(`The ${this.species} lived in the near to you`);
                     }
+                    break;
+                    case 5:
+                // Default fact
+                       
                     break;
                 }
                 return this.fact;
@@ -284,6 +300,12 @@ const dinos =  DinoDataJson['Dinos'].map(dino => (dino.species=="Pigeon")? new P
 
     function CompareMe()
     {
+        
+       if(mainform.reportValidity())
+       {
+
+     
+
         dataHuman = (function() {
             return {
                 name: document.querySelector('#name').value,
@@ -306,6 +328,7 @@ const dinos =  DinoDataJson['Dinos'].map(dino => (dino.species=="Pigeon")? new P
         // Hide form from screen
         mainform.style.display="none";
         document.getElementById("grid").style.display = "flex";
+    }
 
     }
   
