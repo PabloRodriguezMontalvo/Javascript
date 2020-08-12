@@ -1,7 +1,7 @@
 // var DinoDataJson = fetch("dino.json");
 var mainform=document.querySelector("#dino-compare");
 var gridBody=document.querySelector("#grid");
-var dinos=[];
+
 function generateArrayTiles(animals,yo)
 {
     let tiles=[];
@@ -196,11 +196,14 @@ async function getMyDinos(){
         // Dinos to the array
 
     
-        const myJson = await fetch("./dino.json");
-        const data = await myJson.json();
+        return fetch("./dino.json")
+        .then(response => response.json())
+        .then(function(response) {
+            return response.Dinos.map(dino => (dino.species=="Pigeon")? new Pigeon(dino):  new Dino(dino));     
+
+        });
         
         // generate array of Dino objects 
-        dinos =data.Dinos.map(dino => (dino.species=="Pigeon")? new Pigeon(dino):  new Dino(dino));     
        
 
 }
@@ -234,34 +237,38 @@ async function getMyDinos(){
 
     function CompareMe()
     {
-        
+        var dinos=[];
        if(mainform.reportValidity())
        {
 
-           getMyDinos();
+        getMyDinos().then(function(response){
 
-        dataHuman = (function() {
-            return {
-                name: document.querySelector('#name').value,
-                height: parseInt(document.querySelector('#feet').value) + (parseInt(document.querySelector('#inches').value)/12),
-                weight: parseInt(document.querySelector('#weight').value),
-                diet: document.querySelector('#diet').value,
-                species:"human"
-            };
-        })();
-        var Human_maped= new Human(dataHuman);
-        dinos.push(Human_maped);
-        // Object.assign(dinos, Human_maped);
+            dinos=response;
+            dataHuman = (function() {
+                return {
+                    name: document.querySelector('#name').value,
+                    height: parseInt(document.querySelector('#feet').value) + (parseInt(document.querySelector('#inches').value)/12),
+                    weight: parseInt(document.querySelector('#weight').value),
+                    diet: document.querySelector('#diet').value,
+                    species:"human"
+                };
+            })();
+            var Human_maped= new Human(dataHuman);
+            dinos.push(Human_maped);
+            // Object.assign(dinos, Human_maped);
+    
+            // Generate Tiles for each Dino in Array
+            generateArrayTiles(dinos,Human_maped);
+    
+                    // Add tiles to DOM
+    
+          
+            // Hide form from screen
+            mainform.style.display="none";
+            document.getElementById("grid").style.display = "flex";
+        });
 
-        // Generate Tiles for each Dino in Array
-        generateArrayTiles(dinos,Human_maped);
-
-                // Add tiles to DOM
-
-      
-        // Hide form from screen
-        mainform.style.display="none";
-        document.getElementById("grid").style.display = "flex";
+       
     }
 
     }
