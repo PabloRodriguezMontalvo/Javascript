@@ -195,11 +195,14 @@ Pigeon.prototype = Object.assign(Object.create(Animal.prototype), {
 async function getMyDinos(){
         // Dinos to the array
 
-    const myJson = await fetch("./dino.json");
-    const data = await myJson.json();
-  
+    
+        const myJson = await fetch("./dino.json");
+        const data = await myJson.json();
+        
+        // generate array of Dino objects 
+        dinos =data.Dinos.map(dino => (dino.species=="Pigeon")? new Pigeon(dino):  new Dino(dino));     
+       
 
-  return await data.Dinos.map(dino => (dino.species=="Pigeon")? new Pigeon(dino):  new Dino(dino));
 }
 
     // Create Human Object
@@ -235,7 +238,7 @@ async function getMyDinos(){
        if(mainform.reportValidity())
        {
 
-           dinos = await getMyDinos();
+           getMyDinos();
 
         dataHuman = (function() {
             return {
