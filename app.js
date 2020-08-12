@@ -70,7 +70,7 @@ function generateHTMLTile(animal,yo)
   
 }
   
-var DinoDataJson=fetch('dino.json');
+// var DinoDataJson=fetch('dino.json');
 
 const Animal= function (Obj) {
     this.height = Obj.height;
