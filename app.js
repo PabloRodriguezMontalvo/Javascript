@@ -1,4 +1,3 @@
-// var DinoDataJson = fetch("dino.json");
 var mainform=document.querySelector("#dino-compare");
 var gridBody=document.querySelector("#grid");
 
@@ -70,8 +69,6 @@ function generateHTMLTile(animal,yo)
   
 }
   
-// var DinoDataJson=fetch('dino.json');
-
 const Animal= function (Obj) {
     this.height = Obj.height;
 
@@ -93,11 +90,7 @@ const Animal= function (Obj) {
     },
   }
   
- 
-
-
-    // Create Dino Constructor
-    
+// Create Dino Constructor
 const Dino = function({...Obj} = {}) {
 
     Animal.call(this, Obj);
@@ -105,11 +98,7 @@ const Dino = function({...Obj} = {}) {
 
 }
 Dino.prototype =  Animal;
-
 Dino.prototype.constructor = Dino;
-  
-    
-  
 Dino.prototype = Object.assign(Object.create(Animal.prototype), {
     getName: function() {
         return this.species;
@@ -175,15 +164,12 @@ Dino.prototype = Object.assign(Object.create(Animal.prototype), {
         }
      }   
 });
-  
 const Pigeon = function ({...Obj} = {}) {
     Animal.call(this,Obj);
     Object.assign(this, Obj);
 
 }
-
 Pigeon.prototype =  Animal;
-
 Pigeon.prototype.constructor = Pigeon;
 Pigeon.prototype = Object.assign(Object.create(Animal.prototype), {
    
@@ -192,10 +178,10 @@ Pigeon.prototype = Object.assign(Object.create(Animal.prototype), {
     }
     
 });
+
 async function getMyDinos(){
         // Dinos to the array
 
-    
         return fetch("./dino.json")
         .then(response => response.json())
         .then(function(response) {
@@ -203,11 +189,8 @@ async function getMyDinos(){
 
         });
         
-        // generate array of Dino objects 
        
-
 }
-
     // Create Human Object
     const Human = function(Obj) {
         this.name = Obj.name;
@@ -217,7 +200,6 @@ async function getMyDinos(){
 
     }
     Human.prototype.constructor = Human;
-
     Human.prototype = Object.assign(Object.create(Animal.prototype), {
         getName: function() {
             return this.name;
@@ -233,17 +215,19 @@ async function getMyDinos(){
         }
     });
 
-    // Use IIFE to get human data from form
 
     function CompareMe()
     {
         var dinos=[];
+        // Not a typical post form, but i need to check validations
        if(mainform.reportValidity())
        {
 
         getMyDinos().then(function(response){
 
             dinos=response;
+                // Use IIFE to get human data from form
+
             dataHuman = (function() {
                 return {
                     name: document.querySelector('#name').value,
@@ -255,14 +239,12 @@ async function getMyDinos(){
             })();
             var Human_maped= new Human(dataHuman);
             dinos.push(Human_maped);
-            // Object.assign(dinos, Human_maped);
-    
+
             // Generate Tiles for each Dino in Array
+            // Add tiles to DOM
             generateArrayTiles(dinos,Human_maped);
     
                     // Add tiles to DOM
-    
-          
             // Hide form from screen
             mainform.style.display="none";
             document.getElementById("grid").style.display = "flex";
