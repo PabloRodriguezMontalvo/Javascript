@@ -235,7 +235,7 @@ async function getMyDinos(){
        if(mainform.reportValidity())
        {
 
-           dinos =  getMyDinos();
+           dinos = await getMyDinos();
 
         dataHuman = (function() {
             return {
