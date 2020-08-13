@@ -38,7 +38,7 @@ function generateHTMLTile(animal, myData) {
     tooltip.innerHTML =
       "<p><strong>Weight:" +
       animal.weight +
-      " lbs</strong></p><p><strong>Height:" +
+      " lbs </strong></p><p><strong>Height:" +
       animal.getHeight() +
       "</strong></p>";
   } else {
@@ -103,6 +103,9 @@ Dino.prototype = {
   getName: function () {
     return this.species;
   },
+  getImg: function () {
+    return `images/${this.getName().toLowerCase()}.png`;
+  },
 
   getFact: function (animal) {
     let randomNumber = Math.floor(Math.random() * 4 + 1);
@@ -121,7 +124,7 @@ Dino.prototype = {
         break;
     }
     return this.fact;
-  },
+  }
   // Create Dino Compare Method 1
   // NOTE: Weight in JSON file is in lbs, height in inches.
   // Compare diet
