@@ -23,7 +23,6 @@ function generateHTMLTile(animal, myData) {
   const gridItem = document.createElement("div");
   const head = document.createElement("h2");
   const upperdiv = document.createElement("div");
-
   const image = document.createElement("img");
   const fact = document.createElement("b");
   const tooltip = document.createElement("span");
@@ -53,17 +52,13 @@ function generateHTMLTile(animal, myData) {
       "</strong></p>";
     fact.innerText = animal.getFact(myData);
   }
-
-  image.src = animal.getImg();
-
   //Dino Tile
+  image.src = animal.getImg();
 
   gridItem.appendChild(head);
   gridItem.appendChild(upperdiv);
-
   upperdiv.appendChild(image);
   upperdiv.appendChild(tooltip);
-
   fact.innerText && gridItem.appendChild(fact);
 
   return gridItem;
@@ -75,13 +70,13 @@ function generateHTMLTile(animal, myData) {
  */
 const Animal = function (Obj) {
   this.height = Obj.height;
-
   this.weight = Obj.weight;
   this.diet = Obj.diet;
   this.species = Obj.species;
   this.fact = Obj.fact;
   (this.when = Obj.when), (this.where = Obj.where);
 };
+
 Animal.prototype = {
   getName: function () {
     return this.species;
@@ -101,12 +96,14 @@ const Dino = function ({ ...Obj } = {}) {
   Animal.call(this, Obj);
   Object.assign(this, Obj);
 };
+
 Dino.prototype = Animal;
 Dino.prototype.constructor = Dino;
 Dino.prototype = Object.assign(Object.create(Animal.prototype), {
   getName: function () {
     return this.species;
   },
+
   getFact: function (animal) {
     let randomNumber = Math.floor(Math.random() * 4 + 1);
     switch (randomNumber) {
@@ -115,16 +112,12 @@ Dino.prototype = Object.assign(Object.create(Animal.prototype), {
         break;
       case 2:
         this.compareWeight(animal);
-
         break;
       case 3:
         this.compareHeight(animal);
-
         break;
-
       case 4:
         // Default fact
-
         break;
     }
     return this.fact;
@@ -139,11 +132,9 @@ Dino.prototype = Object.assign(Object.create(Animal.prototype), {
       this.fact = `The ${this.species} was a ${this.diet}`;
     }
   },
-
   // Create Dino Compare Method 2
   // NOTE: Weight in JSON file is in lbs, height in inches.
   // compare weight
-
   compareWeight: function (animal) {
     if (this.weight >= animal.weight) {
       this.fact = `The ${this.species} was ${Math.floor(
@@ -153,7 +144,6 @@ Dino.prototype = Object.assign(Object.create(Animal.prototype), {
       this.fact = `Incredible! You are heavier than ${this.species}`;
     }
   },
-
   // Create Dino Compare Method 3
   // NOTE: Weight in JSON file is in lbs, height in inches.
   //compare height
@@ -176,6 +166,7 @@ const Pigeon = function ({ ...Obj } = {}) {
   Animal.call(this, Obj);
   Object.assign(this, Obj);
 };
+
 Pigeon.prototype = Animal;
 Pigeon.prototype.constructor = Pigeon;
 Pigeon.prototype = Object.assign(Object.create(Animal.prototype), {
@@ -186,7 +177,6 @@ Pigeon.prototype = Object.assign(Object.create(Animal.prototype), {
 
 async function getMyDinos() {
   // Dinos to the array
-
   return fetch("./dino.json")
     .then((response) => response.json())
     .then(function (response) {
@@ -206,6 +196,7 @@ const Human = function (Obj) {
   Animal.call(this, Obj);
   Object.assign(this, Obj);
 };
+
 Human.prototype.constructor = Human;
 Human.prototype = Object.assign(Object.create(Animal.prototype), {
   getName: function () {
@@ -219,7 +210,6 @@ Human.prototype = Object.assign(Object.create(Animal.prototype), {
   },
 });
 
-//
 /**
  * @description On button click, prepare and display infographic. This is the pseudo-post starts all the main-core program
  */
@@ -230,7 +220,6 @@ function CompareMe() {
     getMyDinos().then(function (response) {
       dinos = response;
       // Use IIFE to get human data from form
-
       dataHuman = (function () {
         return {
           name: document.querySelector("#name").value,
@@ -242,13 +231,11 @@ function CompareMe() {
           species: "human",
         };
       })();
-      var Human_maped = new Human(dataHuman);
 
+      var Human_maped = new Human(dataHuman);
       // Generate Tiles for each Dino in Array
       // Add tiles to DOM
       generateArrayTiles(dinos, Human_maped);
-
-      // Add tiles to DOM
       // Hide form from screen
       mainform.style.display = "none";
       document.getElementById("grid").style.display = "flex";
