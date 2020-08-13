@@ -38,7 +38,7 @@ function generateHTMLTile(animal, myData) {
     tooltip.innerHTML =
       "<p><strong>Weight:" +
       animal.weight +
-      "lbs</strong></p><p><strong>Height:" +
+      " lbs</strong></p><p><strong>Height:" +
       animal.getHeight() +
       "</strong></p>";
   } else {
