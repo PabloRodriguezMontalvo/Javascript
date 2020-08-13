@@ -124,7 +124,7 @@ Dino.prototype = {
         break;
     }
     return this.fact;
-  }
+  },
   // Create Dino Compare Method 1
   // NOTE: Weight in JSON file is in lbs, height in inches.
   // Compare diet
