@@ -1,266 +1,263 @@
-var mainform=document.querySelector("#dino-compare");
-var gridBody=document.querySelector("#grid");
+let mainform = document.querySelector("#dino-compare");
+let gridBody = document.querySelector("#grid");
 
-function generateArrayTiles(animals,yo)
-{
-    let tiles=[];
-   ordererGrid=   animals.slice(0,4).concat(yo).concat(animals.slice(4, 8));
-   ordererGrid.forEach(element => {
-       tiles.push(generateHTMLTile(element,yo));
-
-    });
-    tiles.forEach(tile => {
-        gridBody.appendChild(tile);
-
-    });
-
-
-}
-function generateHTMLTile(animal,yo)
-{
-    const gridItem = document.createElement("div");
-    const head = document.createElement("h2");
-    const upperdiv=document.createElement("div");
-
-    const image = document.createElement("img");
-    const fact = document.createElement("b");
-    const tooltip=document.createElement("span");
-    gridItem.classList.add("grid-item");
-    upperdiv.classList.add("upperdiv");
-    tooltip.classList.add("tooltip");
-
-
-    //Human Tile
-    if(animal.species=='human')
-    {
-
-   
-      head.innerText = animal.name;
-  
-      image.alt = "human";
-      tooltip.innerHTML="<p><strong>Weight:"+animal.weight+"lbs</strong></p><p><strong>Height:"+animal.getHeight()+"</strong></p>";
-      fact.innerText = animal.getFact();
-
-
-    }
-      else{
-        head.innerText = animal.species;
-        image.alt = animal.species;
-        tooltip.innerHTML="<p><strong>Where:"+animal.where+"</strong></p><p><strong>When:"+animal.when+"</strong></p>";
-        fact.innerText = animal.getFact(yo);
-
-       
-      }
+/**
+    * @description Generation of the array and the tilesets
+    * @param {array} animals - All the animals, including the human and the pigeon
+    * @param {object} myData - Isolated data of the human
     
-      image.src = animal.getImg();
-      
-  //Dino Tile
-     
-  
-    gridItem.appendChild(head);
-    gridItem.appendChild(upperdiv);
-
-    upperdiv.appendChild(image);
-    upperdiv.appendChild(tooltip);
-
-    fact.innerText && gridItem.appendChild(fact);
-  
-    return gridItem;
-  
+    */
+function generateArrayTiles(animals, myData) {
+  ordererGrid = animals.slice(0, 4).concat(myData).concat(animals.slice(4, 8));
+  ordererGrid.forEach((element) => {
+    gridBody.appendChild(generateHTMLTile(element, myData));
+  });
 }
-  
-const Animal= function (Obj) {
-    this.height = Obj.height;
-
-    this.weight = Obj.weight;
-    this.diet=Obj.diet;
-    this.species=Obj.species;
-    this.fact = Obj.fact;
-    this.when=Obj.when,
-    this.where=Obj.where;
-
+/**
+    * @description Generation of the html DOM
+    * @param {array} animals - All the animals, including the human and the pigeon
+    * @param {object} myData - Isolated data of the human
     
-  };
-  Animal.prototype = {
-    getName: function() {
-        return this.species;
-    },
-    getImg: function() {
-        return `images/${this.getName().toLowerCase()}.png`;
-    },
+    */
+function generateHTMLTile(animal, myData) {
+  const gridItem = document.createElement("div");
+  const head = document.createElement("h2");
+  const upperdiv = document.createElement("div");
+
+  const image = document.createElement("img");
+  const fact = document.createElement("b");
+  const tooltip = document.createElement("span");
+  gridItem.classList.add("grid-item");
+  upperdiv.classList.add("upperdiv");
+  tooltip.classList.add("tooltip");
+
+  //Human Tile
+  if (animal.species == "human") {
+    head.innerText = animal.name;
+
+    image.alt = "human";
+    tooltip.innerHTML =
+      "<p><strong>Weight:" +
+      animal.weight +
+      "lbs</strong></p><p><strong>Height:" +
+      animal.getHeight() +
+      "</strong></p>";
+  } else {
+    head.innerText = animal.species;
+    image.alt = animal.species;
+    tooltip.innerHTML =
+      "<p><strong>Where:" +
+      animal.where +
+      "</strong></p><p><strong>When:" +
+      animal.when +
+      "</strong></p>";
+    fact.innerText = animal.getFact(myData);
   }
-  
-// Create Dino Constructor
-const Dino = function({...Obj} = {}) {
 
-    Animal.call(this, Obj);
-    Object.assign(this, Obj);
+  image.src = animal.getImg();
 
+  //Dino Tile
+
+  gridItem.appendChild(head);
+  gridItem.appendChild(upperdiv);
+
+  upperdiv.appendChild(image);
+  upperdiv.appendChild(tooltip);
+
+  fact.innerText && gridItem.appendChild(fact);
+
+  return gridItem;
 }
-Dino.prototype =  Animal;
+/**
+ * @description Animal constructor
+ * @constructor
+ * @param {Obj} Obj - Object with the info of the animal
+ */
+const Animal = function (Obj) {
+  this.height = Obj.height;
+
+  this.weight = Obj.weight;
+  this.diet = Obj.diet;
+  this.species = Obj.species;
+  this.fact = Obj.fact;
+  (this.when = Obj.when), (this.where = Obj.where);
+};
+Animal.prototype = {
+  getName: function () {
+    return this.species;
+  },
+  getImg: function () {
+    return `images/${this.getName().toLowerCase()}.png`;
+  },
+};
+
+// Create Dino Constructor
+/**
+ * @description Dino constructor
+ * @constructor
+ * @param {Obj} Obj - Object with the info of the animal
+ */
+const Dino = function ({ ...Obj } = {}) {
+  Animal.call(this, Obj);
+  Object.assign(this, Obj);
+};
+Dino.prototype = Animal;
 Dino.prototype.constructor = Dino;
 Dino.prototype = Object.assign(Object.create(Animal.prototype), {
-    getName: function() {
-        return this.species;
-    },
-    getFact: function(animal) {
-        var ResultFact = "Interesting...";
-        var randomNumber= Math.floor((Math.random() * 5) + 1);
-        switch(randomNumber) {
-                case 1:
-                this.compareDiet(animal)
-                break;
-                case 2:
-                    this.compareWeight(animal);
-              
-                break;
-                case 3:
-                    this.compareHeight(animal);
-                
-                break;
-                case 4:
-                    if (this.when== animal.when) {
-                        this.fact=(`The ${this.species} lived in the near to you`);
-                    }
-                    break;
-                    case 5:
-                // Default fact
-                       
-                    break;
-                }
-                return this.fact;
-            },
-    // Create Dino Compare Method 1
-    // NOTE: Weight in JSON file is in lbs, height in inches. 
-    // Compare diet
-    compareDiet:function(animal){
-        if (this.diet === animal.diet){
-            this.fact = (`Your diet is the same diet as the ${this.species}`);
-        } else {
-            this.fact = (`The ${this.species} was a ${this.diet}`);
-        }
-    },
-    
-// Create Dino Compare Method 2
-// NOTE: Weight in JSON file is in lbs, height in inches.
-// compare weight
+  getName: function () {
+    return this.species;
+  },
+  getFact: function (animal) {
+    let ResultFact = "Interesting...";
+    let randomNumber = Math.floor(Math.random() * 5 + 1);
+    switch (randomNumber) {
+      case 1:
+        this.compareDiet(animal);
+        break;
+      case 2:
+        this.compareWeight(animal);
 
-    compareWeight:function(animal){
-        if (this.weight>= animal.weight) {
-            this.fact =(`The ${this.species} was ${Math.floor(this.weight/animal.weight)}  times heavier than you` );
-        } else {
-            this.fact =(`Incredible! You are heavier than ${this.species}`);
+        break;
+      case 3:
+        this.compareHeight(animal);
+
+        break;
+      case 4:
+        if (this.when == animal.when) {
+          this.fact = `The ${this.species} lived in the near to you`;
         }
-     },
-     
-// Create Dino Compare Method 3
-// NOTE: Weight in JSON file is in lbs, height in inches.
-//compare height
-     compareHeight : function(animal){
-        if (this.height>= animal.height) {
-            this.fact =(`The ${this.species} was ${Math.floor(this.height/animal.height)} times taller than you`);
-        } else {
-            this.fact =(`What?! You are taller than ${this.species}!`);
-        }
-     }   
+        break;
+      case 5:
+        // Default fact
+
+        break;
+    }
+    return this.fact;
+  },
+  // Create Dino Compare Method 1
+  // NOTE: Weight in JSON file is in lbs, height in inches.
+  // Compare diet
+  compareDiet: function (animal) {
+    if (this.diet === animal.diet) {
+      this.fact = `Your diet is the same diet as the ${this.species}`;
+    } else {
+      this.fact = `The ${this.species} was a ${this.diet}`;
+    }
+  },
+
+  // Create Dino Compare Method 2
+  // NOTE: Weight in JSON file is in lbs, height in inches.
+  // compare weight
+
+  compareWeight: function (animal) {
+    if (this.weight >= animal.weight) {
+      this.fact = `The ${this.species} was ${Math.floor(
+        this.weight / animal.weight
+      )}  times heavier than you`;
+    } else {
+      this.fact = `Incredible! You are heavier than ${this.species}`;
+    }
+  },
+
+  // Create Dino Compare Method 3
+  // NOTE: Weight in JSON file is in lbs, height in inches.
+  //compare height
+  compareHeight: function (animal) {
+    if (this.height >= animal.height) {
+      this.fact = `The ${this.species} was ${Math.floor(
+        this.height / animal.height
+      )} times taller than you`;
+    } else {
+      this.fact = `What?! You are taller than ${this.species}!`;
+    }
+  },
 });
-const Pigeon = function ({...Obj} = {}) {
-    Animal.call(this,Obj);
-    Object.assign(this, Obj);
-
-}
-Pigeon.prototype =  Animal;
+/**
+ * @description Pigeon constructor
+ * @constructor
+ * @param {Obj} Obj - Object with the info of the animal
+ */
+const Pigeon = function ({ ...Obj } = {}) {
+  Animal.call(this, Obj);
+  Object.assign(this, Obj);
+};
+Pigeon.prototype = Animal;
 Pigeon.prototype.constructor = Pigeon;
 Pigeon.prototype = Object.assign(Object.create(Animal.prototype), {
-   
-    getFact: function(animal) {
-        return this.fact;
-    }
-    
+  getFact: function (animal) {
+    return this.fact;
+  },
 });
 
-async function getMyDinos(){
-        // Dinos to the array
+async function getMyDinos() {
+  // Dinos to the array
 
-        return fetch("./dino.json")
-        .then(response => response.json())
-        .then(function(response) {
-            return response.Dinos.map(dino => (dino.species=="Pigeon")? new Pigeon(dino):  new Dino(dino));     
-
-        });
-        
-       
-}
-    // Create Human Object
-    const Human = function(Obj) {
-        this.name = Obj.name;
-
-        Animal.call(this,Obj);
-        Object.assign(this, Obj);
-
-    }
-    Human.prototype.constructor = Human;
-    Human.prototype = Object.assign(Object.create(Animal.prototype), {
-        getName: function() {
-            return this.name;
-        },
-        getImg: function() {
-            return 'images/human.png';
-        },
-        getHeight: function() {
-            return `${this.height || 0} feets`;
-        },
-        getFact: function() {
-            return `Ey, its you!`;
-        }
+  return fetch("./dino.json")
+    .then((response) => response.json())
+    .then(function (response) {
+      return response.Dinos.map((dino) =>
+        dino.species == "Pigeon" ? new Pigeon(dino) : new Dino(dino)
+      );
     });
+}
+/**
+ * @description Human constructor
+ * @constructor
+ * @param {Obj} Obj - Object with the info of the animal
+ */
+// Create Human Object
+const Human = function (Obj) {
+  this.name = Obj.name;
+  Animal.call(this, Obj);
+  Object.assign(this, Obj);
+};
+Human.prototype.constructor = Human;
+Human.prototype = Object.assign(Object.create(Animal.prototype), {
+  getName: function () {
+    return this.name;
+  },
+  getImg: function () {
+    return "images/human.png";
+  },
+  getHeight: function () {
+    return `${this.height || 0} feets`;
+  },
+});
 
+//
+/**
+ * @description On button click, prepare and display infographic. This is the pseudo-post initiate all the main-core program
+ */
+function CompareMe() {
+  let dinos = [];
+  // Not a typical post form, but i need to check validations
+  if (mainform.reportValidity()) {
+    getMyDinos().then(function (response) {
+      dinos = response;
+      // Use IIFE to get human data from form
 
-    function CompareMe()
-    {
-        var dinos=[];
-        // Not a typical post form, but i need to check validations
-       if(mainform.reportValidity())
-       {
+      dataHuman = (function () {
+        return {
+          name: document.querySelector("#name").value,
+          height:
+            parseInt(document.querySelector("#feet").value) +
+            parseInt(document.querySelector("#inches").value) / 12,
+          weight: parseInt(document.querySelector("#weight").value),
+          diet: document.querySelector("#diet").value,
+          species: "human",
+        };
+      })();
+      var Human_maped = new Human(dataHuman);
+      dinos.push(Human_maped);
 
-        getMyDinos().then(function(response){
+      // Generate Tiles for each Dino in Array
+      // Add tiles to DOM
+      generateArrayTiles(dinos, Human_maped);
 
-            dinos=response;
-                // Use IIFE to get human data from form
-
-            dataHuman = (function() {
-                return {
-                    name: document.querySelector('#name').value,
-                    height: parseInt(document.querySelector('#feet').value) + (parseInt(document.querySelector('#inches').value)/12),
-                    weight: parseInt(document.querySelector('#weight').value),
-                    diet: document.querySelector('#diet').value,
-                    species:"human"
-                };
-            })();
-            var Human_maped= new Human(dataHuman);
-            dinos.push(Human_maped);
-
-            // Generate Tiles for each Dino in Array
-            // Add tiles to DOM
-            generateArrayTiles(dinos,Human_maped);
-    
-                    // Add tiles to DOM
-            // Hide form from screen
-            mainform.style.display="none";
-            document.getElementById("grid").style.display = "flex";
-        });
-
-       
-    }
-
-    }
-  
- 
-
-
-  
-
-  
-
-
-// On button click, prepare and display infographic
+      // Add tiles to DOM
+      // Hide form from screen
+      mainform.style.display = "none";
+      document.getElementById("grid").style.display = "flex";
+    });
+  }
+}
