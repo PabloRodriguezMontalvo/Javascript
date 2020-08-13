@@ -108,8 +108,7 @@ Dino.prototype = Object.assign(Object.create(Animal.prototype), {
     return this.species;
   },
   getFact: function (animal) {
-    let ResultFact = "Interesting...";
-    let randomNumber = Math.floor(Math.random() * 5 + 1);
+    let randomNumber = Math.floor(Math.random() * 4 + 1);
     switch (randomNumber) {
       case 1:
         this.compareDiet(animal);
@@ -122,12 +121,8 @@ Dino.prototype = Object.assign(Object.create(Animal.prototype), {
         this.compareHeight(animal);
 
         break;
+
       case 4:
-        if (this.when == animal.when) {
-          this.fact = `The ${this.species} lived in the near to you`;
-        }
-        break;
-      case 5:
         // Default fact
 
         break;
@@ -226,7 +221,7 @@ Human.prototype = Object.assign(Object.create(Animal.prototype), {
 
 //
 /**
- * @description On button click, prepare and display infographic. This is the pseudo-post initiate all the main-core program
+ * @description On button click, prepare and display infographic. This is the pseudo-post starts all the main-core program
  */
 function CompareMe() {
   let dinos = [];
@@ -248,7 +243,6 @@ function CompareMe() {
         };
       })();
       var Human_maped = new Human(dataHuman);
-      dinos.push(Human_maped);
 
       // Generate Tiles for each Dino in Array
       // Add tiles to DOM
