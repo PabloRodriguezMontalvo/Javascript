@@ -99,7 +99,7 @@ const Dino = function ({ ...Obj } = {}) {
 
 Dino.prototype = Animal;
 Dino.prototype.constructor = Dino;
-Dino.prototype = Object.assign(Object.create(Animal.prototype), {
+Dino.prototype = {
   getName: function () {
     return this.species;
   },
@@ -156,7 +156,7 @@ Dino.prototype = Object.assign(Object.create(Animal.prototype), {
       this.fact = `What?! You are taller than ${this.species}!`;
     }
   },
-});
+};
 /**
  * @description Pigeon constructor
  * @constructor
